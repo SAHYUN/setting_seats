@@ -1,4 +1,4 @@
-__author__ = "유종현 [ jongh1118@gmail.com ]"
+__author__ = "[ jongh1118@gmail.com ]"
 
 import random
 import sys
