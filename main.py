@@ -2,7 +2,7 @@ __author__ = "[ jongh1118@gmail.com ]"
 
 import random
 import sys
-import asyncio
+import time
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
@@ -17,15 +17,19 @@ class WindowClass(QMainWindow, form_class):
         self.setupUi(self)
 
         self.fst = None
+        self.fst_2 = None
         self.lst = None
 
         self.firstline_set.clicked.connect(self.setup_first)
+        self.secondline_set.clicked.connect(self.setup_first_2)
         self.lastline_set.clicked.connect(self.setup_last)
         self.start.clicked.connect(self.change_line)
+        self.reset.clicked.connect(self._reset)
 
     def change_line(self):
 
         fl = [0, 0, 0, 0, 0]
+        fl_2 = [0, 0, 0, 0, 0]
         ll = [0, 0, 0, 0]
 
         all_student = [x for x in range(1, 30)]
@@ -51,6 +55,19 @@ class WindowClass(QMainWindow, form_class):
                     fl.remove(0)
         except:
             fl = None
+        
+        try:
+            for i in self.fst_2.split(","):
+                fl_2.append(i)
+                all_student.remove(int(i))
+                fl_2.remove(0)
+            
+            if len(fl_2) > len(self.fst_2.split(",")):
+                for j in range(len(fl_2) - len(self.fst_2.split(","))):
+                    fl_2.append(all_student.pop(random.randint(0, len(all_student) - 1)))
+                    fl_2.remove(0)
+        except:
+            fl_2 = None
 
         
         try:
@@ -104,12 +121,15 @@ class WindowClass(QMainWindow, form_class):
             random.shuffle(fl)
             random.shuffle(ll)
 
-            for k in range(1, 5):
+            for k in range(2, 5):
                 for l in range(5):
                     array[k][l] = all_student.pop(random.randint(0, len(all_student) - 1))
             
             for q in range(5):
                 array[0][q] = fl.pop(random.randint(0, len(fl) - 1))
+            
+            for j in range(5):
+                array[1][j] = fl_2.pop(random.randint(0, len(fl_2) - 1))
             
             for m in range(4):
                 array[5][m] = ll.pop(random.randint(0, len(ll) - 1))
@@ -127,22 +147,57 @@ class WindowClass(QMainWindow, form_class):
         for i in array:
             for j in i:
                 number[k][a].setText(str(j))
+                number[k][a].repaint()
                 a += 1
+                time.sleep(0.1)
             k += 1
             a = 0
 
     
 
     def setup_first(self):
-        text, ok = QInputDialog.getText(self, "앞줄", "앞줄에 있어야 하는 학생의 번호를 작성해주세요.(최대 5명)\n띄어쓰기 없이 , 로 구분해주세요.\nex) 1,2,3")
+        text, ok = QInputDialog.getText(self, "1번째줄", "1번째줄에 있어야 하는 학생의 번호를 작성해주세요.(최대 5명)\n띄어쓰기 없이 , 로 구분해주세요.\nex) 1,2,3")
         if ok:
             self.fst = text
     
+    def setup_first_2(self):
+        text, ok = QInputDialog.getText(self, "2번째줄", "2번째줄에 있어야 하는 학생의 번호를 작성해주세요. (최대 5명)\n띄어쓰기 없이 , 로 구분해주세요.\nex) 1,2,3")
+        if ok:
+            self.fst_2 = text
+    
     def setup_last(self):
-        text, ok = QInputDialog.getText(self, "뒷줄", "뒷줄에 있어야 하는 학생의 번호를 작성해주세요.(최대 4명)\n띄어쓰기 없이 , 로 구분해주세요.\nex) 1,2,3")
+        text, ok = QInputDialog.getText(self, "뒷줄", "뒷줄에 있어야 하는 학생의 번호를 작성해주세요. (최대 4명)\n띄어쓰기 없이 , 로 구분해주세요.\nex) 1,2,3")
         if ok:
             self.lst = text
+    
+    def _reset(self):
+        self.fst = None
+        self.fst_2 = None
+        self.lst = None
 
+        a = 0
+        k = 0
+
+        number = [[self.set_1, self.set_2, self.set_3, self.set_4, self.set_5],
+                [self.set_6, self.set_7, self.set_8, self.set_9, self.set_10],
+                [self.set_11, self.set_12, self.set_13, self.set_14, self.set_15],
+                [self.set_16, self.set_17, self.set_18, self.set_19, self.set_20],
+                [self.set_21, self.set_22, self.set_23, self.set_24, self.set_25],
+                [self.set_26, self.set_27, self.set_28, self.set_29]]
+        
+        array = [[0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0]]
+
+        for i in array:
+            for j in i:
+                number[k][a].setText(" ")
+                a += 1
+            k += 1
+            a = 0
 
 
 if __name__ == "__main__":
